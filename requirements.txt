@@ -1,0 +1,14 @@
+cryptography==3.4.8
+# gmssl==3.3.1
+protobuf==3.20
+pycryptodome==3.14.1
+requests==2.26.0
+setuptools==58.0.4
+urllib3==1.26.9
+Flask~=2.1.2
+six~=1.16.0
+hkdf~=0.0.3
+aiogrpc~=1.8
+lark-parser~=0.7.1
+rx~=3.2.0
+couchdb~=1.2
