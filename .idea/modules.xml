@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/block_chain_back.iml" filepath="$PROJECT_DIR$/.idea/block_chain_back.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/EMR_back.iml" filepath="$PROJECT_DIR$/.idea/EMR_back.iml" />
     </modules>
   </component>
 </project>

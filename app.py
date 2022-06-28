@@ -13,8 +13,9 @@ app = Flask(__name__)
 @app.route("/", methods=['GET', 'POST'])
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    user_name = request.form['user_name']
-    password = request.form['password']
+    data = json.loads(request.get_data())
+    user_name = data['user_name']
+    password = data['password']
     if not config.user_data.get(user_name):
         return return_msg('201', 'user not found')
     elif config.user_data[user_name] == password:
@@ -25,64 +26,77 @@ def login():
 
 @app.route("/patient/add", methods=['POST'])
 def patient_add():
-    data = request.form['data']
-    res = blockchain.set(data)
+    data = json.loads(request.get_data())
+    print(data['id'])
+    # data = request.form['data']
+    res = blockchain.set(json.dumps(data))
     return return_msg(res['ccCode'], data=res['ccData'])
 
 
 @app.route("/patient/update", methods=['POST'])
 def patient_update():
-    data = request.form['data']
-    res = blockchain.update(data)
+    data = json.loads(request.get_data())
+    # data = request.form['data']
+    res = blockchain.update(json.dumps(data))
     return return_msg(res['ccCode'], data=res['ccData'])
 
 
 @app.route("/patient/delete", methods=['POST'])
 def patient_delete():
-    patient_id = request.form['patient_id']
+    data = json.loads(request.get_data())
+    patient_id = data['patient_id']
     res = blockchain.delete(patient_id)
     return return_msg(res['ccCode'], data=res['ccData'])
 
 
 @app.route("/patient/get", methods=['POST'])
 def patient_get():
-    patient_id = request.form['patient_id']
+    data = json.loads(request.get_data())
+    patient_id = data['patient_id']
     res = blockchain.get(patient_id)
     return return_msg(res['ccCode'], data=json.loads(res['ccData']))
 
 
 @app.route("/case/update", methods=['POST'])
 def case_add():
-    patient_id = request.form['patient_id']
-    data = json.loads(request.form['data'])
+    data = json.loads(request.get_data())
+    patient_id = data['patient_id']
+    case_data = data['data']
+    print(data)
     patient = json.loads(blockchain.get(patient_id)['ccData'])
     time_list = [case['time'] for case in patient['caseList']]
-    if data['time'] in time_list:
-        patient['caseList'][time_list.index(data['time'])] = data
+    if case_data['time'] in time_list:
+        patient['caseList'][time_list.index(case_data['time'])] = case_data
     else:
-        patient['caseList'].append(data)
+        patient['caseList'].append(case_data)
     res = blockchain.update(json.dumps(patient))
     return return_msg(res['ccCode'], data=res['ccData'])
 
 
 @app.route("/case/delete", methods=['POST'])
 def case_delete():
-    patient_id = request.form['patient_id']
-    data = json.loads(request.form['data'])
+    data = json.loads(request.get_data())
+    patient_id = data['patient_id']
+    case_data = data['data']
     patient = json.loads(blockchain.get(patient_id)['ccData'])
     time_list = [case['time'] for case in patient['caseList']]
-    if data['time'] in time_list:
-        patient['caseList'].pop(time_list.index(data['time']))
+    if case_data['time'] in time_list:
+        patient['caseList'].pop(time_list.index(case_data['time']))
     res = blockchain.update(json.dumps(patient))
     return return_msg(res['ccCode'], data=res['ccData'])
 
 
 @app.route("/case/get", methods=['POST'])
 def case_get():
-    patient_id = request.form['patient_id']
+    data = json.loads(request.get_data())
+    patient_id = data['patient_id']
     patient = json.loads(blockchain.get(patient_id)['ccData'])
     return return_msg('200', data=patient['caseList'])
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=False)
+    if config.env == 'dev':
+        app.run(host='127.0.0.1', port=5000, debug=False)
+    else:
+        app.run(host='0.0.0.0', port=5000, debug=False)
+

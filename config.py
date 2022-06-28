@@ -1,4 +1,5 @@
 from datetime import datetime
+import socket
 
 user_code = "USER0001202204221813207006642"
 app_code = "app00859263495eb4d4d68a4d4f4bfb9511e61"
@@ -25,3 +26,7 @@ mock_data = [{
         'result': '健康',
     }]
 }]
+
+env = 'pro'
+if socket.gethostname() == 'LEOXLLI-NB1':
+    env = 'dev'

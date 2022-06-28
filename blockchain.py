@@ -53,6 +53,3 @@ def get(id):
 def printRes(res):
     print(res['body']['ccRes'])
 
-if __name__ == '__main__':
-    set("{\"age\":\"18\",\"caseList\":[{\"hospital\":\"广中医\",\"result\":\"健康\",\"time\":\"2022-06-25 05:13:50\"}],\"id\":\"0003\",\"info\":\"无不良疾病史\",\"name\":\"小兰\",\"sex\":\"男\"}"
-)
